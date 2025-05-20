@@ -33,10 +33,17 @@ const StyledSlider = styled(Slider, {
 
 export default function DynamicCSS() {
   const [success, setSuccess] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false);  
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSuccess(event.target.checked);
   };
+
+  if (!mounted) return null;
 
   return (
     <React.Fragment>
