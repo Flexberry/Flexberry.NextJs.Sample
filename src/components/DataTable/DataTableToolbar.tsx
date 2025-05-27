@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Divider, Icon, IconButton, Stack, Typography } from '@mui/material';
-
+import SettingsIcon from '@mui/icons-material/Settings';
 interface DataTableToolbarProps {
   handleCreateButtonClick: () => void;
 }
@@ -27,7 +27,7 @@ const DataTableToolbar: React.FC<DataTableToolbarProps> = ({ handleCreateButtonC
         </Button>
         <Divider orientation="vertical" variant="middle" flexItem />
         <IconButton color="primary" aria-label="delete" title="Настройки">
-          <Icon className="icon-settings" />
+          <SettingsIcon />
         </IconButton>
       </Stack>
     </Stack>
