@@ -1,0 +1,30 @@
+/* styles/tanstack-table.css */
+table.tanstack-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #2d2d2d;
+    color: #eee;
+    font-family: sans-serif;
+  }
+  table.tanstack-table th,
+  table.tanstack-table td {
+    border: 1px solid #555;
+    padding: 8px;
+  }
+  table.tanstack-table th {
+    background: #3b3b3b;
+    position: relative;
+    user-select: none;
+  }
+  table.tanstack-table th .resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    cursor: col-resize;
+  }
+  table.tanstack-table tbody tr:nth-child(even) {
+    background: #333;
+  }
+  
