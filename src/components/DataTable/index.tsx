@@ -40,16 +40,6 @@ const columnHeaders: Record<string, string> = {
   rating: 'Рейтинг',
 };
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: DataTableProps) => {
   const [globalFilter, setGlobalFilter] = useState('');
@@ -109,7 +99,6 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
                   .map((field) => columnHeaders[field] || field)
                   .join(', ')
               }
-              MenuProps={MenuProps}
             >
               {columns.map((col) => (
                 <MenuItem key={col.field} value={col.field}>
