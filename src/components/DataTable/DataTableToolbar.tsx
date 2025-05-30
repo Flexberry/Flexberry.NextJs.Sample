@@ -3,9 +3,10 @@ import { Button, Divider, Icon, IconButton, Stack, Typography } from '@mui/mater
 import SettingsIcon from '@mui/icons-material/Settings';
 interface DataTableToolbarProps {
   handleCreateButtonClick: () => void;
+  onSettingsClick: () => void;
 }
 
-const DataTableToolbar: React.FC<DataTableToolbarProps> = ({ handleCreateButtonClick }) => {
+const DataTableToolbar: React.FC<DataTableToolbarProps> = ({ handleCreateButtonClick, onSettingsClick }) => {
   return (
     <Stack direction="row" alignItems="center" flexWrap="wrap" mb={2.5}>
       <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
@@ -26,7 +27,7 @@ const DataTableToolbar: React.FC<DataTableToolbarProps> = ({ handleCreateButtonC
           Экспортировать
         </Button>
         <Divider orientation="vertical" variant="middle" flexItem />
-        <IconButton color="primary" aria-label="delete" title="Настройки">
+        <IconButton color="primary" aria-label="settings" title="Настройки" onClick={onSettingsClick}>
           <SettingsIcon />
         </IconButton>
       </Stack>
@@ -35,3 +36,4 @@ const DataTableToolbar: React.FC<DataTableToolbarProps> = ({ handleCreateButtonC
 };
 
 export default DataTableToolbar;
+
