@@ -1,12 +1,20 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Typography } from '@mui/material';
+import {
+  Typography,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  OutlinedInput,
+  Checkbox,
+  ListItemText,
+} from '@mui/material';
 
 import { Column } from 'primereact/column';
 import { DataTable as PrimeDataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
-import { MultiSelect } from 'primereact/multiselect';
 
 import DataTableToolbar from '@/components/DataTable/DataTableToolbar';
 
@@ -30,6 +38,17 @@ const columnHeaders: Record<string, string> = {
   category: 'Категория',
   quantity: 'Количество',
   rating: 'Рейтинг',
+};
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
 };
 
 const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: DataTableProps) => {
@@ -77,14 +96,29 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
         </span>
 
         {showColumnSettings && (
-          <MultiSelect
-            value={visibleColumns}
-            options={columns.map((col) => ({ label: col.header, value: col.field }))}
-            onChange={(e) => setVisibleColumns(e.value)}
-            display="chip"
-            placeholder="Скрыть/показать столбцы"
-            className="w-full md:w-20rem"
-          />
+          <FormControl sx={{ minWidth: 250, maxWidth: 300 }}>
+            <InputLabel id="column_select">Скрыть/показать столбцы</InputLabel>
+            <Select
+              labelId="column_select"
+              multiple
+              value={visibleColumns}
+              onChange={(e) => setVisibleColumns(e.target.value as string[])}
+              input={<OutlinedInput label="Скрыть/показать столбцы" />}
+              renderValue={(selected) =>
+                (selected as string[])
+                  .map((field) => columnHeaders[field] || field)
+                  .join(', ')
+              }
+              MenuProps={MenuProps}
+            >
+              {columns.map((col) => (
+                <MenuItem key={col.field} value={col.field}>
+                  <Checkbox checked={visibleColumns.indexOf(col.field) > -1} />
+                  <ListItemText primary={col.header} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         )}
       </div>
 
