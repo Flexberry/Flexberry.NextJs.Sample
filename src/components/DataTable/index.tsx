@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+<<<<<<< HEAD
 import {
   Typography,
   InputLabel,
@@ -11,10 +12,17 @@ import {
   Checkbox,
   ListItemText,
 } from '@mui/material';
+=======
+import { Typography } from '@mui/material';
+>>>>>>> origin/main
 
 import { Column } from 'primereact/column';
 import { DataTable as PrimeDataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
+<<<<<<< HEAD
+=======
+import { MultiSelect } from 'primereact/multiselect';
+>>>>>>> origin/main
 
 import DataTableToolbar from '@/components/DataTable/DataTableToolbar';
 
@@ -47,7 +55,11 @@ const columnHeaders: Record<string, string> = {
 
 const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: DataTableProps) => {
   const [globalFilter, setGlobalFilter] = useState('');
+<<<<<<< HEAD
   const [visibleColumns, setVisibleColumns] = useState(fields.map((f) => f.field));
+=======
+  const [visibleColumns, setVisibleColumns] = useState(fields);
+>>>>>>> origin/main
   const [showColumnSettings, setShowColumnSettings] = useState(false);
   const [first, setFirst] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -57,7 +69,10 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
       fields.map(({ field, width }) => ({
         field,
         header: columnHeaders[field] || field,
+<<<<<<< HEAD
         width,
+=======
+>>>>>>> origin/main
       })),
     [fields]
   );
@@ -93,6 +108,7 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
         </span>
 
         {showColumnSettings && (
+<<<<<<< HEAD
           <FormControl sx={{ minWidth: 250, maxWidth: 300 }}>
             <InputLabel id="column_select">Скрыть/показать столбцы</InputLabel>
             <Select
@@ -115,6 +131,16 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
               ))}
             </Select>
           </FormControl>
+=======
+          <MultiSelect
+            value={visibleColumns}
+            options={columns.map((col) => ({ label: col.header, value: col.field }))}
+            onChange={(e) => setVisibleColumns(e.value)}
+            display="chip"
+            placeholder="Скрыть/показать столбцы"
+            className="w-full md:w-20rem"
+          />
+>>>>>>> origin/main
         )}
       </div>
 
