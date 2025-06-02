@@ -23,9 +23,14 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import './style.scss';
 
+interface FieldDefinition {
+  field: string;
+  width?: string;
+}
+
 interface DataTableProps {
   data: any[];
-  fields: string[];
+  fields: FieldDefinition[];
   title: string;
   onDelete: (index: number) => void;
   onRowClick: (item: any) => void;
@@ -40,19 +45,19 @@ const columnHeaders: Record<string, string> = {
   rating: 'Рейтинг',
 };
 
-
 const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: DataTableProps) => {
   const [globalFilter, setGlobalFilter] = useState('');
-  const [visibleColumns, setVisibleColumns] = useState(fields);
+  const [visibleColumns, setVisibleColumns] = useState(fields.map((f) => f.field));
   const [showColumnSettings, setShowColumnSettings] = useState(false);
   const [first, setFirst] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const columns = useMemo(
     () =>
-      fields.map((field) => ({
+      fields.map(({ field, width }) => ({
         field,
         header: columnHeaders[field] || field,
+        width,
       })),
     [fields]
   );
@@ -60,7 +65,9 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
   const filteredData = useMemo(() => {
     if (!globalFilter) return data;
     return data.filter((item) =>
-      fields.some((field) => item[field]?.toString().toLowerCase().includes(globalFilter.toLowerCase()))
+      fields.some((f) =>
+        item[f.field]?.toString().toLowerCase().includes(globalFilter.toLowerCase())
+      )
     );
   }, [data, fields, globalFilter]);
 
@@ -125,14 +132,21 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
         resizableColumns
         columnResizeMode="fit"
         scrollable
-        globalFilterFields={fields}
+        globalFilterFields={fields.map((f) => f.field)}
         sortMode="multiple"
         scrollHeight="100%"
+        reorderableColumns
       >
         {columns
           .filter((col) => visibleColumns.includes(col.field))
           .map((col) => (
-            <Column key={col.field} field={col.field} header={col.header} sortable />
+            <Column
+              key={col.field}
+              field={col.field}
+              header={col.header}
+              sortable
+              style={col.width ? { width: col.width } : {}}
+            />
           ))}
       </PrimeDataTable>
     </>

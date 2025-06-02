@@ -99,7 +99,13 @@ export default function LegalActPassportPage() {
     },
   ];
 
-  const fields = ['name', 'price', 'category', 'quantity', 'rating'];
+   const fields = [
+    { field: 'name', width: '25%' },
+    { field: 'price', width: '70px' },
+    { field: 'category', width: '20%' },
+    { field: 'quantity', width: '15%' },
+    { field: 'rating', width: '50px' },
+  ];
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '700px' }}>
