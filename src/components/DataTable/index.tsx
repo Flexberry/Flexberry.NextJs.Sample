@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-<<<<<<< HEAD
 import {
   Typography,
   InputLabel,
@@ -11,18 +10,12 @@ import {
   OutlinedInput,
   Checkbox,
   ListItemText,
+  SelectChangeEvent,
 } from '@mui/material';
-=======
-import { Typography } from '@mui/material';
->>>>>>> origin/main
 
 import { Column } from 'primereact/column';
 import { DataTable as PrimeDataTable } from 'primereact/datatable';
 import { InputText } from 'primereact/inputtext';
-<<<<<<< HEAD
-=======
-import { MultiSelect } from 'primereact/multiselect';
->>>>>>> origin/main
 
 import DataTableToolbar from '@/components/DataTable/DataTableToolbar';
 
@@ -31,8 +24,9 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import './style.scss';
 
-interface FieldDefinition {
+export interface FieldDefinition {
   field: string;
+  header: string;
   width?: string;
 }
 
@@ -45,37 +39,19 @@ interface DataTableProps {
   onCreate: () => void;
 }
 
-const columnHeaders: Record<string, string> = {
-  name: 'Наименование',
-  price: 'Цена',
-  category: 'Категория',
-  quantity: 'Количество',
-  rating: 'Рейтинг',
-};
-
-const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: DataTableProps) => {
+const DataTable = ({
+  data,
+  fields,
+  title,
+  onDelete,
+  onRowClick,
+  onCreate,
+}: DataTableProps) => {
   const [globalFilter, setGlobalFilter] = useState('');
-<<<<<<< HEAD
-  const [visibleColumns, setVisibleColumns] = useState(fields.map((f) => f.field));
-=======
-  const [visibleColumns, setVisibleColumns] = useState(fields);
->>>>>>> origin/main
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(fields.map((f) => f.field));
   const [showColumnSettings, setShowColumnSettings] = useState(false);
   const [first, setFirst] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const columns = useMemo(
-    () =>
-      fields.map(({ field, width }) => ({
-        field,
-        header: columnHeaders[field] || field,
-<<<<<<< HEAD
-        width,
-=======
->>>>>>> origin/main
-      })),
-    [fields]
-  );
 
   const filteredData = useMemo(() => {
     if (!globalFilter) return data;
@@ -86,12 +62,20 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
     );
   }, [data, fields, globalFilter]);
 
+  const handleColumnChange = (event: SelectChangeEvent<typeof visibleColumns>) => {
+    const {
+      target: { value },
+    } = event;
+    setVisibleColumns(typeof value === 'string' ? value.split(',') : value);
+  };
+
   return (
     <>
       <Typography variant="h2" component="h2">
         {title}
       </Typography>
       <Typography variant="subtitle1">Подзаголовок</Typography>
+
       <DataTableToolbar
         handleCreateButtonClick={onCreate}
         onSettingsClick={() => setShowColumnSettings((prev) => !prev)}
@@ -108,39 +92,28 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
         </span>
 
         {showColumnSettings && (
-<<<<<<< HEAD
           <FormControl sx={{ minWidth: 250, maxWidth: 300 }}>
             <InputLabel id="column_select">Скрыть/показать столбцы</InputLabel>
             <Select
               labelId="column_select"
               multiple
               value={visibleColumns}
-              onChange={(e) => setVisibleColumns(e.target.value as string[])}
+              onChange={handleColumnChange}
               input={<OutlinedInput label="Скрыть/показать столбцы" />}
               renderValue={(selected) =>
                 (selected as string[])
-                  .map((field) => columnHeaders[field] || field)
+                  .map((field) => fields.find((f) => f.field === field)?.header || field)
                   .join(', ')
               }
             >
-              {columns.map((col) => (
+              {fields.map((col) => (
                 <MenuItem key={col.field} value={col.field}>
-                  <Checkbox checked={visibleColumns.indexOf(col.field) > -1} />
+                  <Checkbox checked={visibleColumns.includes(col.field)} />
                   <ListItemText primary={col.header} />
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-=======
-          <MultiSelect
-            value={visibleColumns}
-            options={columns.map((col) => ({ label: col.header, value: col.field }))}
-            onChange={(e) => setVisibleColumns(e.value)}
-            display="chip"
-            placeholder="Скрыть/показать столбцы"
-            className="w-full md:w-20rem"
-          />
->>>>>>> origin/main
         )}
       </div>
 
@@ -150,8 +123,8 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
         first={first}
         rows={rowsPerPage}
         onPage={(e) => {
-          setFirst(e.first);
-          setRowsPerPage(e.rows);
+          setFirst(e.first ?? 0);
+          setRowsPerPage(e.rows ?? 5);
         }}
         onRowClick={(e) => onRowClick(e.data)}
         rowsPerPageOptions={[5, 10, 20]}
@@ -163,7 +136,7 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
         scrollHeight="100%"
         reorderableColumns
       >
-        {columns
+        {fields
           .filter((col) => visibleColumns.includes(col.field))
           .map((col) => (
             <Column
