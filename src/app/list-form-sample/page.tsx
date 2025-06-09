@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Icon, IconButton, TextField, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
 import DataTable from '@/components/DataTable';
@@ -103,6 +103,24 @@ export default function LegalActPassportPage() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '700px' }}>
+      <TextField
+        id=""
+        label="gjbcr"
+        slotProps={{
+          input: {
+            endAdornment: (
+              <>
+                <IconButton onClick={() => alert('Edit')}>
+                  <Icon className="icon-arrow-out" />
+                </IconButton>
+                <IconButton onClick={() => alert('Clear')}>
+                  <Icon className="icon-close" />
+                </IconButton>
+              </>
+            ),
+          },
+        }}
+      />
       <DataTable
         data={products}
         fields={fields}
