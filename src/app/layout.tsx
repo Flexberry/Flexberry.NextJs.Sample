@@ -1,16 +1,16 @@
 'use client';
 
 import React from 'react';
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { CssBaseline } from '@mui/material';
+
+import AppTheme from '@/theme/AppTheme';
+
+import '@/assets/icons.css';
+import '@/assets/fonts.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-
-  useEffect(() => {
-    setSidebarOpen(true);
-  }, []);
-
   const queryClient = useMemo(
     () =>
       new QueryClient({
@@ -23,17 +23,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     []
   );
 
-  const handleHeaderNavigationOpen = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
-  const handleHeaderExit = () => {};
-
   return (
     <html lang="ru">
       <body>
         <QueryClientProvider client={queryClient}>
-          {children}
+          <AppTheme>
+            <CssBaseline />
+            {children}
+          </AppTheme>
         </QueryClientProvider>
       </body>
     </html>
