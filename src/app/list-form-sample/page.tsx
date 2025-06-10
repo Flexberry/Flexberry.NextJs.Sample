@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
 import DataTable from '@/components/DataTable';
+import {FieldDefinition} from '@/components/DataTable';
 
 export default function LegalActPassportPage() {
   const router = useRouter();
@@ -99,7 +100,13 @@ export default function LegalActPassportPage() {
     },
   ];
 
-  const fields = ['name', 'price', 'category', 'quantity', 'rating'];
+    const fields: FieldDefinition[] = [
+    { field: 'name', header: 'Наименование', width: '25%' },
+    { field: 'price', header: 'Цена', width: '120px' },
+    { field: 'category', header: 'Категория', width: '20%' },
+    { field: 'quantity', header: 'Количество', width: '10%' },
+    { field: 'rating', header: 'Рейтинг', width: '10%' },
+  ];
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '700px' }}>

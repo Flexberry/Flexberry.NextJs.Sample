@@ -10,6 +10,7 @@ import {
   OutlinedInput,
   Checkbox,
   ListItemText,
+  SelectChangeEvent,
 } from '@mui/material';
 
 import { Column } from 'primereact/column';
@@ -23,45 +24,50 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import './style.scss';
 
+export interface FieldDefinition {
+  field: string;
+  header: string;
+  width?: string;
+}
+
 interface DataTableProps {
   data: any[];
-  fields: string[];
+  fields: FieldDefinition[];
   title: string;
   onDelete: (index: number) => void;
   onRowClick: (item: any) => void;
   onCreate: () => void;
 }
 
-const columnHeaders: Record<string, string> = {
-  name: 'Наименование',
-  price: 'Цена',
-  category: 'Категория',
-  quantity: 'Количество',
-  rating: 'Рейтинг',
-};
-
-const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: DataTableProps) => {
+const DataTable = ({
+  data,
+  fields,
+  title,
+  onDelete,
+  onRowClick,
+  onCreate,
+}: DataTableProps) => {
   const [globalFilter, setGlobalFilter] = useState('');
-  const [visibleColumns, setVisibleColumns] = useState(fields);
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(fields.map((f) => f.field));
   const [showColumnSettings, setShowColumnSettings] = useState(false);
   const [first, setFirst] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const columns = useMemo(
-    () =>
-      fields.map((field) => ({
-        field,
-        header: columnHeaders[field] || field,
-      })),
-    [fields]
-  );
-
   const filteredData = useMemo(() => {
     if (!globalFilter) return data;
     return data.filter((item) =>
-      fields.some((field) => item[field]?.toString().toLowerCase().includes(globalFilter.toLowerCase()))
+      fields.some((f) =>
+        item[f.field]?.toString().toLowerCase().includes(globalFilter.toLowerCase())
+      )
     );
   }, [data, fields, globalFilter]);
+
+  const handleColumnChange = (event: SelectChangeEvent<typeof visibleColumns>) => {
+    const {
+      target: { value },
+    } = event;
+    setVisibleColumns(typeof value === 'string' ? value.split(',') : value);
+  };
 
   return (
     <>
@@ -91,17 +97,17 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
               labelId="column_select"
               multiple
               value={visibleColumns}
-              onChange={(e) => setVisibleColumns(e.target.value as string[])}
+              onChange={handleColumnChange}
               input={<OutlinedInput label="Скрыть/показать столбцы" />}
               renderValue={(selected) =>
                 (selected as string[])
-                  .map((field) => columnHeaders[field] || field)
+                  .map((field) => fields.find((f) => f.field === field)?.header || field)
                   .join(', ')
               }
             >
-              {columns.map((col) => (
+              {fields.map((col) => (
                 <MenuItem key={col.field} value={col.field}>
-                  <Checkbox checked={visibleColumns.indexOf(col.field) > -1} />
+                  <Checkbox checked={visibleColumns.includes(col.field)} />
                   <ListItemText primary={col.header} />
                 </MenuItem>
               ))}
@@ -116,22 +122,29 @@ const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: Data
         first={first}
         rows={rowsPerPage}
         onPage={(e) => {
-          setFirst(e.first);
-          setRowsPerPage(e.rows);
+          setFirst(e.first ?? 0);
+          setRowsPerPage(e.rows ?? 5);
         }}
         onRowClick={(e) => onRowClick(e.data)}
         rowsPerPageOptions={[5, 10, 20]}
         resizableColumns
         columnResizeMode="fit"
         scrollable
-        globalFilterFields={fields}
+        globalFilterFields={fields.map((f) => f.field)}
         sortMode="multiple"
         scrollHeight="100%"
+        reorderableColumns
       >
-        {columns
+        {fields
           .filter((col) => visibleColumns.includes(col.field))
           .map((col) => (
-            <Column key={col.field} field={col.field} header={col.header} sortable />
+            <Column
+              key={col.field}
+              field={col.field}
+              header={col.header}
+              sortable
+              style={col.width ? { width: col.width } : {}}
+            />
           ))}
       </PrimeDataTable>
     </>
