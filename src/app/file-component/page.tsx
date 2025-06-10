@@ -1,15 +1,15 @@
-'use client';
+  'use client';
 
-import { Container } from '@mui/material';
-import FileComponent from '@/components/FileComponent/FileComponent';
-import { useRouter } from 'next/navigation';
+  import { Container } from '@mui/material';
+  import FileComponent from '@/components/FileComponent/FileComponent';
+  import { useRouter } from 'next/navigation';
 
-export default function FileComponentPage() {
-  const router = useRouter();
+  export default function FileComponentPage() {
+    const router = useRouter();
 
-  return (
-    <Container>
-      <FileComponent />
-    </Container>
-  );
-}
+    return (
+      <Container>
+        <FileComponent />
+      </Container>
+    );
+  }

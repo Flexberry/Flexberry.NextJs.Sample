@@ -1,24 +1,27 @@
 import React, { useRef, useState } from 'react';
-import { Box, Typography, IconButton, Button, styled } from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import CloseIcon from '@mui/icons-material/Close';
-
+import { Box, Typography, IconButton, styled } from '@mui/material';
+import Icon from '@mui/material/Icon';
 
 const DropZone = styled(Box)(({ theme }) => ({
   border: `1px dashed ${theme.palette.primary.main}`,
   borderRadius: 8,
-  padding: theme.spacing(2),
+  padding: theme.spacing(1),
   textAlign: 'center',
   cursor: 'pointer',
   backgroundColor: theme.palette.background.paper,
   transition: 'background-color 0.3s ease',
+  width: '458.67px',
+  height: '34px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  fontFamily: 'Lato, sans-serif',
   '&:hover': {
     backgroundColor: theme.palette.action.hover,
   },
 }));
 
-const MAX_FILE_SIZE = 104857600; 
+const MAX_FILE_SIZE = 104857600;
 
 const FileComponent: React.FC = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -53,7 +56,7 @@ const FileComponent: React.FC = () => {
   };
 
   return (
-    <Box>
+    <Box fontFamily="Lato, sans-serif">
       <DropZone
         onClick={() => inputRef.current?.click()}
         onDrop={handleDrop}
@@ -65,17 +68,20 @@ const FileComponent: React.FC = () => {
         sx={{ borderColor: dragOver ? 'primary.dark' : 'primary.main' }}
       >
         {!file ? (
-          <Typography variant="body1" color="textSecondary">
+          <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'Lato, sans-serif' }}>
             Перетащите файл или кликните для выбора
           </Typography>
         ) : (
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Typography variant="body1" sx={{ wordBreak: 'break-all' }}>
+          <>
+            <Typography
+              variant="body2"
+              sx={{ wordBreak: 'break-all', fontFamily: 'Lato, sans-serif' }}
+            >
               {file.name}
             </Typography>
-            <Box>
-              <IconButton>
-                <VisibilityIcon />
+            <Box display="flex" alignItems="center">
+              <IconButton title="Просмотр" size="small">
+                <Icon className="icon-eye" sx={{ fontSize: 24 }} />
               </IconButton>
               <IconButton
                 onClick={(e) => {
@@ -83,8 +89,9 @@ const FileComponent: React.FC = () => {
                   handleDownload();
                 }}
                 title="Скачать"
+                size="small"
               >
-                <DownloadIcon />
+                <Icon className="icon-download" />
               </IconButton>
               <IconButton
                 onClick={(e) => {
@@ -92,11 +99,12 @@ const FileComponent: React.FC = () => {
                   setFile(null);
                 }}
                 title="Очистить"
+                size="small"
               >
-                <CloseIcon />
+                <Icon className="icon-close" />
               </IconButton>
             </Box>
-          </Box>
+          </>
         )}
       </DropZone>
       <input
