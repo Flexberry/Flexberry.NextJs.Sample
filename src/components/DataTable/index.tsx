@@ -40,7 +40,6 @@ const columnHeaders: Record<string, string> = {
   rating: 'Рейтинг',
 };
 
-
 const DataTable = ({ data, fields, title, onDelete, onRowClick, onCreate }: DataTableProps) => {
   const [globalFilter, setGlobalFilter] = useState('');
   const [visibleColumns, setVisibleColumns] = useState(fields);
