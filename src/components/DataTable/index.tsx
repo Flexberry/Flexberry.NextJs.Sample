@@ -75,7 +75,6 @@ const DataTable = ({
         {title}
       </Typography>
       <Typography variant="subtitle1">Подзаголовок</Typography>
-
       <DataTableToolbar
         handleCreateButtonClick={onCreate}
         onSettingsClick={() => setShowColumnSettings((prev) => !prev)}
